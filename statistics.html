@@ -1,38 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Phishing Statistics</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Phishing Data & Trends | Don't Take the Bait</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    /* =========== local enhancements (2025‑07‑08) =========== */
+    .subnav{display:flex;gap:.75rem;margin-top:.5rem;font-size:.9rem;flex-wrap:wrap;position:sticky;top:0;background:#fff;padding:.5rem 0;z-index:20;}
+    .subnav a{color:var(--accent);text-decoration:none;padding:.25rem .6rem;border-radius:14px;transition:background .2s,color .2s;}
+    .subnav a:hover{background:var(--accent);color:#fff;}
+
+    section{margin-block:3.5rem;}
+    h2{margin-bottom:.5rem;}
+
+    .note{font-size:.9rem;color:#444;margin:0 0 1.5rem 0;font-style:italic;}
+
+    .chart-wrap{background:#fff;padding:1.5rem;border-radius:10px;margin-bottom:1.5rem;box-shadow:0 4px 8px rgba(0,0,0,.05);overflow-x:auto;}
+    canvas{display:block;max-width:100%;height:auto;margin-inline:auto;}
+
+    figure{margin:0;}
+    figcaption{font-size:.8rem;color:#666;margin-top:.75rem;line-height:1.5;word-break:break-word;}
+
+    table{border-collapse:collapse;width:100%;margin-top:1.5rem;font-size:.9rem;}
+    th,td{border:1px solid #e0e0e0;padding:.6rem;text-align:left;}
+    th{background:#f1f5ff;color:#222;}
+  </style>
 </head>
 <body>
-<header>
-    <h1>Phishing by the Numbers</h1>
+  <header class="wrapper">
+    <h1>Data‑Driven Phishing Trends</h1>
     <nav>
-        <a href="index.html">Home</a>
-        <a href="resources.html">Resources</a>
-        <a href="statistics.html" aria-current="page">Statistics</a>
-        <a href="game.html">Spot‑the‑Scam Game</a>
+      <a href="index.html">Home</a>
+      <a href="game.html">Game</a>
+      <a href="statistics.html" aria-current="page">Stats</a>
+      <a href="resources.html">Resources</a>
     </nav>
-</header>
-<main>
-    <h2>2024 Snapshot <small>(Source: Verizon DBIR 2025)</small></h2>
-    <ul class="stats">
-        <li><strong>36%</strong> of all data breaches involved phishing.</li>
-        <li><strong>$12bn+</strong> total reported losses worldwide.</li>
-        <li><strong>60%</strong> of victims were small businesses.</li>
-        <li><strong>11 seconds</strong> – average time to first click once delivered.</li>
-    </ul>
+    <div class="subnav">
+      <a href="#volume">Global Attack Volume</a>
+      <a href="#vectors">Initial Access Vectors</a>
+    </div>
+  </header>
 
-    <h3>Top Targeted Demographics</h3>
-    <p class="chart-placeholder">[Insert bar chart here using Chart.js or similar]</p>
+  <main class="wrapper">
 
-    <h3>Attack Volume Over Time</h3>
-    <p class="chart-placeholder">[Insert line chart here]</p>
-</main>
-<footer>
-    <p>&copy; 2025 Don't Take the Bait.</p>
-</footer>
+    <!-- === GLOBAL VOLUME === -->
+    <section id="volume">
+      <h2>Record‑Setting Totals</h2>
+      <p class="note">APWG’s <em>Phishing Activity Trends</em> reports confirm that 2022 and 2023 were history‑making years, each clocking nearly <strong>5 million</strong> unique attacks. 2024 data is shown through Q1.</p>
+
+      <figure class="chart-wrap">
+        <canvas id="volChart" aria-label="Bar chart of phishing attack totals by year" role="img"></canvas>
+        <figcaption>Sources: APWG Q4 2022 Trends Report (4.7 M); APWG Q4 2023 Trends Report (4.99 M); APWG Q1 2024 Trends Report (0.96 M for Q1). Links trimmed for readability.</figcaption>
+      </figure>
+
+      <table>
+        <thead><tr><th>Period</th><th>Verified attacks</th></tr></thead>
+        <tbody>
+          <tr><td>2022 (full year)</td><td>≈ 4,700,000</td></tr>
+          <tr><td>2023 (full year)</td><td>4,987,809</td></tr>
+          <tr><td>2024 Q1</td><td>963,994</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- === ACCESS VECTORS === -->
+    <section id="vectors">
+      <h2>How Attackers Get In</h2>
+      <p class="note">Verizon’s 2025 DBIR shows that credential theft and unpatched vulnerabilities account for over <strong>40 % of breaches</strong> globally.</p>
+
+      <figure class="chart-wrap">
+        <canvas id="vectorChart" aria-label="Pie chart of breach initial access vectors" role="img"></canvas>
+        <figcaption>Data from Verizon DBIR 2025, Figure 1. Shares: stolen credentials 22 %, exploited vulnerabilities 20 %, phishing/social engineering 16 %, misconfiguration 9 %, insider/other 5 %.</figcaption>
+      </figure>
+
+      <table>
+        <thead><tr><th>Vector</th><th>Share of breaches</th></tr></thead>
+        <tbody>
+          <tr><td>Stolen credentials</td><td>22 %</td></tr>
+          <tr><td>Exploited vulnerabilities</td><td>20 %</td></tr>
+          <tr><td>Phishing / social engineering</td><td>16 %</td></tr>
+          <tr><td>Misconfiguration</td><td>9 %</td></tr>
+          <tr><td>Insider / other</td><td>5 %</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+  </main>
+
+  <footer class="wrapper">© 2025 Don’t Take the Bait</footer>
+
+  <script>
+  /* === chart 1 : global volume === */
+  const volCtx=document.getElementById('volChart');
+  new Chart(volCtx,{
+    type:'bar',
+    data:{labels:['2022','2023','2024 Q1'],datasets:[{label:'Unique phishing attacks (millions)',data:[4.7,4.987809,0.963994],borderWidth:1,backgroundColor:['#4c6ef5','#4c6ef5','#4c6ef5']}]},
+    options:{
+      responsive:true,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.parsed.y+' M'}}},
+      scales:{y:{beginAtZero:true,title:{display:true,text:'Millions of attacks'}}}
+    }
+  });
+
+  /* === chart 2 : access vectors === */
+  const vectCtx=document.getElementById('vectorChart');
+  new Chart(vectCtx,{
+    type:'pie',
+    data:{labels:['Stolen creds','Exploited vulns','Phishing','Misconfiguration','Insider'],datasets:[{data:[22,20,16,9,5]}]},
+    options:{responsive:true,plugins:{legend:{position:'bottom'}}}
+  });
+  </script>
 </body>
 </html>
