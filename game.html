@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Phishing Quiz – Don't Take the Bait</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* page‑specific tweaks */
+    .email-box{
+      white-space:pre-line;
+      border:2px solid #ccc;
+      background:#fff;
+      padding:1rem;
+      border-radius:6px;
+      min-height:160px;
+      margin-bottom:1rem;
+      transition:border .2s;
+    }
+    .email-box.correct{border-color:green;}
+    .email-box.wrong{border-color:var(--danger);}
+    #countdown{font-weight:bold;margin-bottom:.5rem;}
+    .controls{display:flex;gap:1rem;margin-bottom:1rem;}
+  </style>
+</head>
+<body>
+  <header class="wrapper">
+    <h1>Phishing Quiz</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="game.html" aria-current="page">Game</a>
+      <a href="statistics.html">Stats</a>
+      <a href="resources.html">Resources</a>
+    </nav>
+  </header>
+
+  <main class="wrapper">
+    <section id="game">
+      <p id="countdown">Time: 10</p>
+      <div id="emailBox" class="email-box">Loading email…</div>
+
+      <div class="controls">
+        <button id="phishingBtn" class="button" type="button">Phishing</button>
+        <button id="legitBtn" class="button" type="button">Legit</button>
+      </div>
+
+      <p id="feedback" class="feedback"></p>
+      <p>Score: <span id="score">0</span> | Best: <span id="bestScore">0</span></p>
+    </section>
+  </main>
+
+  <footer class="wrapper">© 2025 Don’t Take the Bait</footer>
+
+  <script>
+  // === simple data set – swap for external emails.json later ===
+  const emails=[
+    {email:`Subject: Payroll reroute request\n\nHi, I'm traveling – can you update my direct deposit to the temp account below before today's run?\n\nAcct#: 62739102\nRouting: 111000614`,answer:'phishing'},
+    {email:`Subject: Amazon.com – your order #114‑9212478‑5733026 has shipped\n\nArriving: Friday, July 11\nTracking: https://www.ups.com/track?loc=en_US&tracknum=1Z5V123F019003726`,answer:'legit'},
+    {email:`Subject: MFA reset required\n\nYour Microsoft 365 authentication expires today. Re‑enroll now: https://login.microsoftonline.com.ez‑auth.net`,answer:'phishing'},
+    {email:`Subject: FPL – Your electricity bill is ready\n\nTotal due: $146.12\nView statement: https://fpl.com/login`,answer:'legit'},
+    {email:`Subject: Package held – action needed\n\nUPS attempted delivery but needs confirmation of street number. Confirm within 24 h: https://bit.ly/3YkS0aL`,answer:'phishing'},
+    {email:`Subject: Dropbox file shared with you\n\nJohn Smith shared “Q2 bonuses.pdf”. Log in to view: https://dropbox‑secure.files.dl‑storage.com`,answer:'phishing'},
+    {email:`Subject: Zoom invitation – Weekly Ops Sync\n\nWhen: Wed 3 p.m. EST\nJoin: https://zoom.us/j/87423399122?pwd=T0x0NFlUa2pRZz09`,answer:'legit'},
+    {email:`Subject: IRS Refund Notice\n\nWe recalculated your 2024 return. Claim additional refund: see attached form and submit today.`,answer:'phishing'}
+  ];
+
+  // === game state ===
+  const emailBox=document.getElementById('emailBox');
+  const countdownEl=document.getElementById('countdown');
+  const scoreEl=document.getElementById('score');
+  const bestEl=document.getElementById('bestScore');
+  const feedbackEl=document.getElementById('feedback');
+  const phBtn=document.getElementById('phishingBtn');
+  const lgBtn=document.getElementById('legitBtn');
+
+  let idx=0,score=0,timer=10,tickHandle;
+
+  // load best score from localStorage
+  bestEl.textContent=localStorage.best||0;
+
+  // shuffle emails (Fisher‑Yates)
+  (function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}})(emails);
+
+  startRound();
+
+  function startRound(){
+    if(idx>=emails.length){return endGame();}
+    emailBox.textContent=emails[idx].email;
+    emailBox.classList.remove('correct','wrong');
+    timer=10;
+    countdownEl.textContent='Time: '+timer;
+    tickHandle=setInterval(tick,1000);
+  }
+
+  function tick(){
+    timer--;
+    countdownEl.textContent='Time: '+timer;
+    if(timer<=0){clearInterval(tickHandle);handleAnswer('timeout');}
+  }
+
+  function handleAnswer(choice){
+    clearInterval(tickHandle);
+    const correct=emails[idx].answer===choice;
+    if(correct){
+      score++;scoreEl.textContent=score;
+      emailBox.classList.add('correct');
+      flash('#2ecc71');
+      feedbackEl.textContent='Correct!';
+    }else{
+      emailBox.classList.add('wrong');
+      flash('#d9372c');
+      feedbackEl.textContent='Wrong';
+    }
+    idx++;
+    setTimeout(()=>{feedbackEl.textContent='';startRound();},700);
+  }
+
+  function flash(color){
+    document.body.style.backgroundColor=color;
+    setTimeout(()=>{document.body.style.backgroundColor='var(--bg)';},200);
+  }
+
+  function endGame(){
+    phBtn.disabled=lgBtn.disabled=true;
+    feedbackEl.textContent='Game over – final score '+score;
+    if(score>(+localStorage.best||0)){
+      localStorage.best=score;
+      bestEl.textContent=score;
+    }
+  }
+
+  phBtn.addEventListener('click',()=>handleAnswer('phishing'));
+  lgBtn.addEventListener('click',()=>handleAnswer('legit'));
+  </script>
+</body>
+</html>
