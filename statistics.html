@@ -7,25 +7,29 @@
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    /* =========== local enhancements (2025‑07‑08) =========== */
+    /* ===== base layout ===== */
+    body{font-family:system-ui,Segoe UI,Roboto,sans-serif;background:#f7f9fc;margin:0;line-height:1.6;color:#222}
+    section{margin-block:3rem}
+    h2{margin-bottom:.6rem}
+    .wrapper{max-width:960px;margin-inline:auto;padding-inline:1rem}
+
+    /* ===== snapshot cards ===== */
+    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem;margin-bottom:2.5rem}
+    .card{background:#fff;border:1px solid #dce1e8;border-radius:10px;padding:1.15rem;text-align:center;box-shadow:0 2px 4px rgba(0,0,0,.04)}
+    .card h3{margin:.1rem 0;font-size:2.05rem;color:#0a53be}
+    .card span{display:block;font-size:.8rem;color:#555;margin-top:.2rem}
+
+    /* ===== sub‑nav & chart styling (kept from original file) ===== */
     .subnav{display:flex;gap:.75rem;margin-top:.5rem;font-size:.9rem;flex-wrap:wrap;position:sticky;top:0;background:#fff;padding:.5rem 0;z-index:20;}
-    .subnav a{color:var(--accent);text-decoration:none;padding:.25rem .6rem;border-radius:14px;transition:background .2s,color .2s;}
-    .subnav a:hover{background:var(--accent);color:#fff;}
+    .subnav a{color:var(--accent,#4c6ef5);text-decoration:none;padding:.25rem .6rem;border-radius:14px;transition:background .2s,color .2s;}
+    .subnav a:hover{background:var(--accent,#4c6ef5);color:#fff;}
 
-    section{margin-block:3.5rem;}
-    h2{margin-bottom:.5rem;}
-
-    .note{font-size:.9rem;color:#444;margin:0 0 1.5rem 0;font-style:italic;}
-
-    .chart-wrap{background:#fff;padding:1.5rem;border-radius:10px;margin-bottom:1.5rem;box-shadow:0 4px 8px rgba(0,0,0,.05);overflow-x:auto;}
-    canvas{display:block;max-width:100%;height:auto;margin-inline:auto;}
-
-    figure{margin:0;}
-    figcaption{font-size:.8rem;color:#666;margin-top:.75rem;line-height:1.5;word-break:break-word;}
-
-    table{border-collapse:collapse;width:100%;margin-top:1.5rem;font-size:.9rem;}
-    th,td{border:1px solid #e0e0e0;padding:.6rem;text-align:left;}
-    th{background:#f1f5ff;color:#222;}
+    .note{font-size:.9rem;color:#444;margin-bottom:1.4rem;font-style:italic}
+    .chart-wrap{background:#fff;padding:1.5rem;border-radius:10px;margin-bottom:1.5rem;box-shadow:0 4px 8px rgba(0,0,0,.05);overflow-x:auto}
+    canvas{display:block;max-width:100%;height:auto;margin-inline:auto}
+    table{border-collapse:collapse;width:100%;margin-top:1.5rem;font-size:.9rem}
+    th,td{border:1px solid #e0e0e0;padding:.6rem;text-align:left}
+    th{background:#f1f5ff;color:#222}
   </style>
 </head>
 <body>
@@ -35,7 +39,7 @@
       <a href="index.html">Home</a>
       <a href="game.html">Game</a>
       <a href="statistics.html" aria-current="page">Stats</a>
-      <a href="phishing.html">Learn</a> 
+      <a href="phishing.html">Learn</a>
       <a href="resources.html">Resources</a>
     </nav>
     <div class="subnav">
@@ -45,73 +49,54 @@
   </header>
 
   <main class="wrapper">
+    <!-- === 2025 Snapshot (new) === -->
+    <section id="snapshot">
+      <div class="cards">
+        <div class="card"><h3>859,532</h3><span>Total IC3 complaints (2024)</span></div>
+        <div class="card"><h3>$16.6 B</h3><span>Victim losses reported (↑33% YoY)</span></div>
+        <div class="card"><h3>193,407</h3><span>Phishing / spoofing complaints (2024)</span></div>
+        <div class="card"><h3>1,003,924</h3><span>Global phishing attacks Q1 2025 (APWG)</span></div>
+        <div class="card"><h3>60%</h3><span>Breaches with human element (DBIR 2025)</span></div>
+        <div class="card"><h3>$4.88M</h3><span>Avg data-breach cost (IBM 2025)</span></div>
+      </div>
+      <section class="section">
+        <h2>Key Insights for Security Teams</h2>
+        <ul>
+          <li><strong>Elderly victims:</strong> 60+ users lost <em>$4.8 B</em> in 2024.</li>
+          <li><strong>BEC still rampant:</strong> $848M in attempted transfers frozen, >21k complaints.</li>
+        </ul>
+      </section>
+    </section>
+
+    <!-- === ORIGINAL CONTENT BELOW === -->
 
     <!-- === GLOBAL VOLUME === -->
     <section id="volume">
       <h2>Record‑Setting Totals</h2>
-      <p class="note">APWG’s <em>Phishing Activity Trends</em> reports confirm that 2022 and 2023 were history‑making years, each clocking nearly <strong>5 million</strong> unique attacks. 2024 data is shown through Q1.</p>
-
-      <figure class="chart-wrap">
-        <canvas id="volChart" aria-label="Bar chart of phishing attack totals by year" role="img"></canvas>
-        <figcaption>Sources: APWG Q4 2022 Trends Report (4.7 M); APWG Q4 2023 Trends Report (4.99 M); APWG Q1 2024 Trends Report (0.96 M for Q1). Links trimmed for readability.</figcaption>
-      </figure>
-
-      <table>
-        <thead><tr><th>Period</th><th>Verified attacks</th></tr></thead>
-        <tbody>
-          <tr><td>2022 (full year)</td><td>≈ 4,700,000</td></tr>
-          <tr><td>2023 (full year)</td><td>4,987,809</td></tr>
-          <tr><td>2024 Q1</td><td>963,994</td></tr>
-        </tbody>
-      </table>
+      <p class="note">APWG’s <em>Phishing Activity Trends</em> reports confirm that 2022 and 2023 were history‑making years, each clocking nearly <strong>5 million</strong> unique attacks. 2024 data covers Q1.</p>
+      <figure class="chart-wrap"><canvas id="volChart" aria-label="Bar chart of phishing attack totals by year" role="img"></canvas><figcaption>Sources: APWG Q4 2022 & Q4 2023 Trends Reports; APWG Q1 2024 Trends Report.</figcaption></figure>
+      <table><thead><tr><th>Period</th><th>Verified attacks</th></tr></thead><tbody><tr><td>2022 (full year)</td><td>≈ 4,700,000</td></tr><tr><td>2023 (full year)</td><td>4,987,809</td></tr><tr><td>2024 Q1</td><td>963,994</td></tr></tbody></table>
     </section>
 
     <!-- === ACCESS VECTORS === -->
     <section id="vectors">
       <h2>How Attackers Get In</h2>
-      <p class="note">Verizon’s 2025 DBIR shows that credential theft and unpatched vulnerabilities account for over <strong>40 % of breaches</strong> globally.</p>
-
-      <figure class="chart-wrap">
-        <canvas id="vectorChart" aria-label="Pie chart of breach initial access vectors" role="img"></canvas>
-        <figcaption>Data from Verizon DBIR 2025, Figure 1. Shares: stolen credentials 22 %, exploited vulnerabilities 20 %, phishing/social engineering 16 %, misconfiguration 9 %, insider/other 5 %.</figcaption>
-      </figure>
-
-      <table>
-        <thead><tr><th>Vector</th><th>Share of breaches</th></tr></thead>
-        <tbody>
-          <tr><td>Stolen credentials</td><td>22 %</td></tr>
-          <tr><td>Exploited vulnerabilities</td><td>20 %</td></tr>
-          <tr><td>Phishing / social engineering</td><td>16 %</td></tr>
-          <tr><td>Misconfiguration</td><td>9 %</td></tr>
-          <tr><td>Insider / other</td><td>5 %</td></tr>
-        </tbody>
-      </table>
+      <p class="note">Verizon’s 2025 DBIR shows that credential theft and unpatched vulnerabilities together drive over <strong>40 % of global breaches</strong>.</p>
+      <figure class="chart-wrap"><canvas id="vectorChart" aria-label="Pie chart of breach initial access vectors" role="img"></canvas><figcaption>Stolen creds 22 %, exploited vulns 20 %, phishing/social 16 %, misconfiguration 9 %, insider/other 5 % (DBIR 2025).</figcaption></figure>
+      <table><thead><tr><th>Vector</th><th>Share of breaches</th></tr></thead><tbody><tr><td>Stolen credentials</td><td>22 %</td></tr><tr><td>Exploited vulnerabilities</td><td>20 %</td></tr><tr><td>Phishing / social engineering</td><td>16 %</td></tr><tr><td>Misconfiguration</td><td>9 %</td></tr><tr><td>Insider / other</td><td>5 %</td></tr></tbody></table>
     </section>
-
   </main>
 
-  <footer class="wrapper">© 2025 Don’t Take the Bait</footer>
+  <footer class="wrapper">© 2025 Don’t Take the Bait</footer>
 
   <script>
   /* === chart 1 : global volume === */
   const volCtx=document.getElementById('volChart');
-  new Chart(volCtx,{
-    type:'bar',
-    data:{labels:['2022','2023','2024 Q1'],datasets:[{label:'Unique phishing attacks (millions)',data:[4.7,4.987809,0.963994],borderWidth:1,backgroundColor:['#4c6ef5','#4c6ef5','#4c6ef5']}]},
-    options:{
-      responsive:true,
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.parsed.y+' M'}}},
-      scales:{y:{beginAtZero:true,title:{display:true,text:'Millions of attacks'}}}
-    }
-  });
+  new Chart(volCtx,{type:'bar',data:{labels:['2022','2023','2024 Q1'],datasets:[{label:'Unique phishing attacks (millions)',data:[4.7,4.987809,0.963994],borderWidth:1}]},options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.parsed.y+' M'}}},scales:{y:{beginAtZero:true,title:{display:true,text:'Millions of attacks'}}}}});
 
   /* === chart 2 : access vectors === */
   const vectCtx=document.getElementById('vectorChart');
-  new Chart(vectCtx,{
-    type:'pie',
-    data:{labels:['Stolen creds','Exploited vulns','Phishing','Misconfiguration','Insider'],datasets:[{data:[22,20,16,9,5]}]},
-    options:{responsive:true,plugins:{legend:{position:'bottom'}}}
-  });
+  new Chart(vectCtx,{type:'pie',data:{labels:['Stolen creds','Exploited vulns','Phishing','Misconfig','Insider'],datasets:[{data:[22,20,16,9,5]}]},options:{responsive:true,plugins:{legend:{position:'bottom'}}}});
   </script>
 </body>
 </html>
